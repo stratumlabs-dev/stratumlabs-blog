@@ -3,75 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stratum Labs Blog</title>
+    <title>Stratum Labs | Cloud Infrastructure & DevOps Consultancy</title>
     <style>
+        :root {
+            --primary: #0066cc;
+            --primary-dark: #004d99;
+            --dark: #111827;
+            --gray: #4b5563;
+            --light-gray: #f9fafb;
+            --border: #e5e7eb;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 0.2rem;
-            color: #111;
-        }
-        .tagline {
-            color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #eaeaea;
-            padding-bottom: 1rem;
-        }
-        h2 {
-            font-size: 1.3rem;
-            margin-top: 1.5rem;
-            color: #222;
-        }
-        ul {
-            list-style-type: none;
+            color: var(--dark);
+            margin: 0;
             padding: 0;
         }
-        li {
-            margin-bottom: 1.2rem;
-            padding-bottom: 1.2rem;
-            border-bottom: 1px solid #f1f1f1;
+        header {
+            background: var(--light-gray);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        a {
-            color: #0066cc;
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--dark);
+            text-decoration: none;
+        }
+        .nav-links a {
+            margin-left: 1.5rem;
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+        }
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        .hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+            color: #94a3b8;
+        }
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.1rem;
+            display: inline-block;
+            transition: background 0.2s;
         }
-        a:hover {
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        section {
+            margin-bottom: 4rem;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .card {
+            background: var(--light-gray);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+        .article-list {
+            list-style: none;
+            padding: 0;
+        }
+        .article-item {
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .article-item a {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .article-item a:hover {
             text-decoration: underline;
         }
-        .post-date {
+        .article-date {
             font-size: 0.85rem;
-            color: #666;
+            color: var(--gray);
             display: block;
             margin-top: 0.3rem;
+        }
+        footer {
+            background: var(--dark);
+            color: #94a3b8;
+            text-align: center;
+            padding: 3rem 2rem;
+            font-size: 0.9rem;
+        }
+        footer a {
+            color: white;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-    <h1>Stratum Labs Blog</h1>
-    <div class="tagline">Infrastructure, Cloud Architecture, and Automation Insights</div>
+    <header>
+        <a href="#" class="logo">Stratum Labs</a>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#services">Consultancy</a>
+            <a href="#docs">Technical Docs</a>
+            <a href="mailto:contact.stratumlabs@gmail.com" class="btn" style="padding: 0.5rem 1rem; color: white;">Contact Us</a>
+        </div>
+    </header>
 
-    <h2>Latest Articles</h2>
-    <ul>
-        <li>
-            <a href="posts/ecs-blue-green-deployments/">Zero-Downtime Blue/Green Deployments on AWS ECS with Terraform and CodeDeploy</a>
-            <span class="post-date">Published by Stratum Labs</span>
-        </li>
-        <li>
-            <a href="posts/terraform-state-lock/">Resolving Terraform State Lock Failures and Concurrent Apply Conflicts</a>
-            <span class="post-date">Published by Stratum Labs</span>
-        </li>
-    </ul>
+    <div class="hero">
+        <h1>Resilient Cloud Architecture & DevOps Engineering</h1>
+        <p>We help engineering organizations build rock-solid Infrastructure as Code, zero-downtime deployment pipelines, and scalable cloud systems.</p>
+        <a href="mailto:contact.stratumlabs@gmail.com" class="btn">Book a Consultancy Call</a>
+    </div>
+
+    <div class="container">
+
+        <!-- About Us Section -->
+        <section id="about">
+            <h2>About Stratum Labs</h2>
+            <p><strong>Stratum Labs</strong> originated from a core engineering philosophy: infrastructure should be predictable, automated, and resilient by design. Founded by infrastructure practitioners who spent years battling complex multi-environment deployments, pipeline bottlenecks, and state management failures, we build the underlying strata that power modern engineering teams.</p>
+            <p>We bridge the gap between rapid product delivery and bulletproof cloud infrastructure, ensuring your systems scale seamlessly without sacrificing security or uptime.</p>
+        </section>
+
+        <!-- Consultancy Services Section -->
+        <section id="services">
+            <h2>Our Core Expertise & Services</h2>
+            <p>We partner with your team to architect, audit, and optimize your cloud infrastructure.</p>
+            <div class="grid">
+                <div class="card">
+                    <h3>Infrastructure as Code (IaC)</h3>
+                    <p>Expert Terraform and AWS architecture design, modular state management, automated code reviews, and robust multi-environment security compliance.</p>
+                </div>
+                <div class="card">
+                    <h3>Zero-Downtime CI/CD</h3>
+                    <p>Designing seamless deployment workflows, automated container rollouts via ECS and CodeDeploy, and eliminating flaky concurrency bottlenecks.</p>
+                </div>
+                <div class="card">
+                    <h3>Cloud Reliability Audits</h3>
+                    <p>Comprehensive reviews of your AWS environments to uncover cost optimization opportunities, performance bottlenecks, and disaster recovery gaps.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Documentation / Articles Section -->
+        <section id="docs">
+            <h2>Technical Documentation & Insights</h2>
+            <p>Deep-dive guides and architectural blueprints written by our engineering team.</p>
+            <ul class="article-list">
+                <li class="article-item">
+                    <a href="posts/ecs-blue-green-deployments/">Zero-Downtime Blue/Green Deployments on AWS ECS with Terraform and CodeDeploy</a>
+                    <span class="article-date">Published by Stratum Labs • Architecture Guide</span>
+                </li>
+                <li class="article-item">
+                    <a href="posts/terraform-state-lock/">Resolving Terraform State Lock Failures and Concurrent Apply Conflicts</a>
+                    <span class="article-date">Published by Stratum Labs • Troubleshooting Guide</span>
+                </li>
+            </ul>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Stratum Labs. All rights reserved. • Get in touch: <a href="mailto:contact.stratumlabs@gmail.com">contact.stratumlabs@gmail.com</a></p>
+    </footer>
 
 </body>
 </html>
