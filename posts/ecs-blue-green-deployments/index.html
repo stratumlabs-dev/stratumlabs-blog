@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Downtime Blue/Green Deployments on AWS ECS with Terraform - Stratum Labs</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: #111;
+        }
+        .meta {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 1rem;
+        }
+        h2 {
+            font-size: 1.4rem;
+            margin-top: 2rem;
+            color: #222;
+        }
+        h3 {
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            color: #444;
+        }
+        pre {
+            background-color: #f6f8fa;
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9rem;
+            border: 1px solid #e1e4e8;
+        }
+        code {
+            font-family: monospace;
+            background-color: rgba(27,31,35,0.05);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        ul {
+            padding-left: 1.5rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        .site-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0066cc;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="../../index.html" class="site-title">&larr; Back to stratumlabs-blog</a>
+
+    <h1>Zero-Downtime Blue/Green Deployments on AWS ECS with Terraform and CodeDeploy</h1>
+    
+    <div class="meta">
+        By Stratum Labs (<a href="mailto:contact.stratumlabs@gmail.com">contact.stratumlabs@gmail.com</a>)
+    </div>
+
+    <p>In modern cloud architecture, deploying new code without dropping user connections is a baseline requirement. When running containerized workloads on AWS Elastic Container Service (ECS), combining ECS with AWS CodeDeploy enables automated blue/green deployments with zero downtime and instant rollback capabilities.</p>
+
+    <h2>The Architecture</h2>
+    <p>A blue/green deployment strategy maintains two identical production environments (Blue and Green):</p>
+    <ul>
+        <li><strong>Blue:</strong> The current running version serving production traffic.</li>
+        <li><strong>Green:</strong> The newly deployed version receiving test traffic before cutover.</li>
+    </ul>
+    <p>When integrated with an Application Load Balancer (ALB) and target groups, CodeDeploy gradually shifts traffic from Blue to Green based on predefined rules.</p>
+
+    <h2>Step 1: Configuring the ECS Service with CodeDeploy</h2>
+    <p>When defining your ECS service via Terraform, you must configure the deployment controller to use <code>CODE_DEPLOY</code>:</p>
+
+    <pre><code>resource "aws_ecs_service" "app" {
+  name            = "stratum-api"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.app.arn
+  desired_count   = 3
+  launch_type     = "FARGATE"
+
+  deployment_controller {
+    type = "CODE_DEPLOY"
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.blue.arn
+    container_name   = "web"
+    container_port   = 8080
+  }
+
+  lifecycle {
+    ignore_changes = [task_definition, load_balancer]
+  }
+}</code></pre>
+
+    <h2>Step 2: Defining the CodeDeploy Application and Deployment Group</h2>
+    <p>Next, set up the CodeDeploy resources to manage the traffic shifting lifecycle:</p>
+
+    <pre><code>resource "aws_codedeploy_app" "ecs_app" {
+  compute_platform = "ECS"
+  name             = "stratum-ecs-app"
+}
+
+resource "aws_codedeploy_deployment_group" "ecs_dg" {
+  app_name               = aws_codedeploy_app.ecs_app.name
+  deployment_group_name  = "stratum-ecs-dg"
+  service_role_arn       = aws_iam_role.codedeploy.arn
+  deployment_config_name = "CodeDeployDefault.ECSAllAtOnce"
+
+  auto_rollback_configuration {
+    enabled = true
+    events  = ["DEPLOYMENT_FAILURE"]
+  }
+
+  blue_green_deployment_config {
+    deployment_ready_option {
+      action_on_timeout = "CONTINUE_DEPLOYMENT"
+    }
+
+    terminate_blue_instances_on_deployment_success {
+      action                         = "TERMINATE"
+      termination_wait_time_in_minutes = 5
+    }
+  }
+
+  ecs_service {
+    cluster_name = aws_ecs_cluster.main.name
+    service_name = aws_ecs_service.app.name
+  }
+
+  load_balancer_info {
+    target_group_pair_info {
+      prod_traffic_route {
+        listener_arns = [aws_lb_listener.https.arn]
+      }
+
+      target_group {
+        name = aws_lb_target_group.blue.name
+      }
+
+      target_group {
+        name = aws_lb_target_group.green.name
+      }
+    }
+  }
+}</code></pre>
+
+    <h2>Summary</h2>
+    <p>By decoupling container scheduling from traffic routing using ECS and CodeDeploy, your engineering team can push updates to production mid-day without user-facing disruption. If any health checks fail during the cutover window, CodeDeploy automatically rolls back traffic to the stable blue environment instantly.</p>
+
+</body>
+</html>
+
