@@ -1,17 +1,52 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Redirecting to Stratum Labs Inquiry Form...</title>
-    <script>
-        // Open the Google Form in a new tab
-        window.open("https://forms.gle/VUqUPdPGDHkxBVZYA", "_blank");
-        // Redirect the current tab back to the homepage so they aren't left on a blank page
-        window.location.href = "../index.html";
-    </script>
+    <title>Stratum Labs | Contact Redirect</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f9fafb;
+            color: #222;
+        }
+        .box {
+            text-align: center;
+            max-width: 400px;
+            padding: 2rem;
+            background: white;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+        }
+        a.btn {
+            display: inline-block;
+            background-color: #0969da;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        a.btn:hover {
+            background-color: #0550ae;
+        }
+    </style>
 </head>
 <body>
-    <p>Opening our consultancy intake form in a new tab... If it didn't open, <a href="https://forms.gle/VUqUPdPGDHkxBVZYA" target="_blank">click here</a>.</p>
+    <div class="box">
+        <h2>Opening Consultancy Form...</h2>
+        <p>If your browser blocked the automatic redirect, click the button below to open our intake form:</p>
+        <a href="https://forms.gle/VUqUPdPGDHkxBVZYA" target="_blank" class="btn">Open Intake Form</a>
+    </div>
+
+    <script>
+        // Attempt automatic redirect to new tab via user interaction fallback
+        window.location.href = "https://forms.gle/VUqUPdPGDHkxBVZYA";
+    </script>
 </body>
 </html>
